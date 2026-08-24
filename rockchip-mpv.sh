@@ -8,7 +8,7 @@ pacman-key --populate archlinuxarm
 pacman -Syyu --noconfirm
 
 # 必要なパッケージのインストール
-pacman -S --noconfirm --need sudo pacman-contrib wget base-devel git
+pacman -S --noconfirm --need sudo pacman-contrib wget base-devel git libjpeg-turbo
 
 # ビルド用一般ユーザー「builder」の作成とsudo権限付与
 useradd -m -G wheel builder
@@ -30,6 +30,7 @@ chmod 755 /etc
 #mkdir -p /home/builder/kernel-org
 chown -R builder:builder /home/builder
 
+pacman -U --noconfirm ffmpeg-*aarch64.pkg.tar*
 # === ここから一般ユーザー「builder」として実行 ===
 sudo -u builder bash  << 'EOF'
 set -eE
@@ -42,28 +43,30 @@ git init
 git config core.sparseCheckout true
 git branch -m main
 git remote add origin https://github.com/iuncuim/manjaro-h616.git
-echo "ffmpeg-v4l2-request/*" >> .git/info/sparse-checkout
+echo "mpv-v4l2request/*" >> .git/info/sparse-checkout
 
 # 必要なフォルダだけをプル
 git pull origin main
 
-cd ffmpeg-v4l2-request
-echo "------------- ffmpeg-v4l2-request ------------------"
+cd mpv-v4l2request
+echo "------------- mpv-v4l2-request ------------------"
 ls -la
 echo "---------------------------------------------------"
+
+sed -i "s|'libjpeg'||" PKGBUILD
 
 # チェックサムの再更新
 #updpkgsums
 
-# ffmpeg-v4l2-request のビルド（--noconfirm で依存関係の自動インストールを許可）
+# mpv-v4l2request のビルド（--noconfirm で依存関係の自動インストールを許可）
 MAKEFLAGS="-j$(nproc)" makepkg -sri --noconfirm 2>&1|tee ~/arch-build-log.txt
 
 EOF
 # === 一般ユーザーでの実行ここまで ===
 
 # 出来上がったパッケージをコンテナのルート「/」に配置
-cp /home/builder/ffmpeg-v4l2-request/ffmpeg-[0-9]*-aarch64.pkg.tar.* /
+cp /home/builder/mpv-v4l2request/mpv-[0-9]*-aarch64.pkg.tar.* /
 
 # ビルドログを root 権限で / に退避（base_kernel.sh が回収できるようにする）
 cp /home/builder/*.txt / 2>/dev/null || true
-rm -rf /home/builder/ffmpeg-v42-request
+
