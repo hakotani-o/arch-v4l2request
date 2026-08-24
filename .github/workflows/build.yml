@@ -24,6 +24,7 @@ jobs:
         run: |
           chmod +x *.sh
           ./base_ffmpeg.sh
+          ./base_mpv.sh
             echo "============================"
             ls -l
             echo "============================="
