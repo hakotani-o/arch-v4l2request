@@ -1,4 +1,6 @@
 # This is a basic workflow to help you get started with Actions
+permissions:
+      contents: write  # これがリリース作成に必要
 
 name: Arch-v4l2requet
 on: workflow_dispatch
@@ -9,42 +11,39 @@ on: workflow_dispatch
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-permissions:
-  contents: write  # これがリリース作成に必要
   
    # This workflow contains a single job called "build"
   build:
     name: Use Linux commands
     runs-on: ubuntu-24.04-arm
     cancel-timeout-minutes: 120
-
-     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+  
+# Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v4
+  - uses: actions/checkout@v4
 
      # Runs a single command using the runners shell
-    - name: build ffmpeg
-      run: |
-         chmod +x *.sh
-         ./base_ffmpeg
+  - name: build ffmpeg
+    run: |
+       chmod +x *.sh
+       ./base_ffmpeg
 
-    - name: Get current date
-      id: date
-      run: echo "now=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
+  - name: Get current date
+    id: date
+    run: echo "now=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
       
       # 旧: upload-artifact のステップをコメントアウトまたは削除し、以下を追加
-    - name: Create Release and Uploa
-      uses: softprops/action-gh-release@v2
-      with:
-          # 実行するたびにユニークなタグ名（例: build-1, build-2...）を付けます
-          tag_name: build-${{ github.run_number }}
-          name: "Orange Pi 5 / 5-PLUS Disk Image Build ${{ github.run_number }}"
-          body: |
-            Arch linux Rockchip Wayland ディスクイメージ Orange Pi 5 / 5-PLUS
+  - name: Create Release and Uploa
+    uses: softprops/action-gh-release@v2
+    with:
+   # 実行するたびにユニークなタグ名（例: build-1, build-2...）を付けます
+       tag_name: build-${{ github.run_number }}
+       name: "Orange Pi 5 / 5-PLUS Disk Image Build ${{ github.run_number }}"
+       body: |
             ビルド日時: ${{ steps.date.outputs.now }}
-          draft: false
-          prerelease: false
+            draft: false
+            prerelease: false
           # ここに圧縮済みファイルのパスを指定します
           files: |
             /ffmpeg-[0-9]*-aarch64.pkg.tar.*
