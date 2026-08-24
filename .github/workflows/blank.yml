@@ -37,7 +37,6 @@ jobs:
   - name: Create Release and Uploa
     uses: softprops/action-gh-release@v2
     with:
-        # 実行するたびにユニークなタグ名（例: build-1, build-2...）を付けます
        tag_name: build-${{ github.run_number }}
        name: "Orange Pi 5 / 5-PLUS Disk Image Build ${{ github.run_number }}"
        body: |
