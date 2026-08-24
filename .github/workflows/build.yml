@@ -23,13 +23,12 @@ jobs:
       - name: all
         run: |
           chmod +x *.sh
-          chmod 0644 etc/pacman.conf
-          ./control-main.sh
+          ./base_ffmpeg.sh
             echo "============================"
             ls -l
             echo "============================="
  
-#      - name: Upload a diisk image
+#      - name: Upload a build application
 #        uses: actions/upload-artifact@v4.5.0
 #        with:
 #         name: ubuntu-image-orangepi-5
@@ -42,28 +41,22 @@ jobs:
         id: date
         run: echo "now=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
 
-      - name: Get kernel version
-        id: kernel
-        run: cat kernel_version >> $GITHUB_OUTPUT
-        
+
 # 旧: upload-artifact のステップをコメントアウトまたは削除し、以下を追加
       - name: Create Release and Upload
         uses: softprops/action-gh-release@v2
         with:
           # 実行するたびにユニークなタグ名（例: build-1, build-2...）を付けます
           tag_name: build-${{ github.run_number }}
-          name: "Orange Pi 5 / 5-PLUS Disk Image Build ${{ github.run_number }}"
+          name: "Orange Pi 5 / 5-PLUS Application Build ${{ github.run_number }}"
           body: |
-            Arch linux Rockchip Wayland ディスクイメージ Orange Pi 5 / 5-PLUS 
+            Arch linux v4l2request Orange Pi 5 / 5-PLUS 
             ビルド日時: ${{ steps.date.outputs.now }}
-            iカーネル : ${{ steps.kernel.outputs.kernel_version }}
           draft: false
           prerelease: false
           # ここに圧縮済みファイルのパスを指定します
           files: |
-            ./Arch-linux-*img.xz
-            ./linux-aarch64-rockchip-7*
-            ./linux-aarch64-rockchip-headers-7*
+            ./ffmpeg-*-aarch64.pkg.tar.*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
