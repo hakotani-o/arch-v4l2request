@@ -31,6 +31,7 @@ sudo mkdir -p ./base_camp/MY-rockchip
 sudo systemd-nspawn -D ./base_camp --resolv-conf=replace-host --as-pid2 /chewitt-ffmpeg.sh
 cp  base_camp/MY-rockchip/* .
 cp base_camp/arch-ffmpeg.txt .
+ls -l
 if [ $mem_size -gt 13 ]; then
         sudo umount base_camp
 	rm -rf base_camp
