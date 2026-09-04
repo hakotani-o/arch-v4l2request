@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: arch-v4l2
+name: arch-v4l2-chewitt
 on: workflow_dispatch
 #workflow_dispatch
 #[push]
@@ -23,7 +23,7 @@ jobs:
       - name: all
         run: |
           chmod +x *.sh
-          ./base_ffmpeg.sh
+          ./pkg_ffmpeg.sh
           ./base_mpv.sh
             echo "============================"
             ls -l
