@@ -30,7 +30,7 @@ chmod 755 /etc
 #mkdir -p /home/builder/kernel-org
 chown -R builder:builder /home/builder
 
-pacman -U --noconfirm ffmpeg-*aarch64.pkg.tar*
+pacman -U --noconfirm /ffmpeg-*aarch64.pkg.tar*
 # === ここから一般ユーザー「builder」として実行 ===
 sudo -u builder bash  << 'EOF'
 set -eE
