@@ -23,9 +23,10 @@ jobs:
       - name: all
         run: |
           chmod +x *.sh
-          #./pkg_ffmpeg.sh
-          ./base_ffmpeg.sh
-          ./base_mpv.sh
+          ./pkg_ffmpeg.sh
+          ./pkg_mpv.sh
+          #./base_ffmpeg.sh
+          #./base_mpv.sh
             echo "============================"
             ls -l
             echo "============================="
