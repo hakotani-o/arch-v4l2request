@@ -17,7 +17,12 @@ sudo pacman-key --populate archlinuxarm
 else
 sudo pacman -S --noconfirm arch-install-scripts
 fi
-#sudo pacman -Syyu
+sudo pacman -Syyu
+
+if [ ! -f ffmpeg-*aarch64.pkg.tar* ]; then
+	echo "ffmpeg need for building mpv"
+	exit
+fi
 
 sudo rm -rf base_camp && sudo mkdir base_camp
 mem_size=`free --giga|grep Mem|awk '{print $2}'`
@@ -25,12 +30,10 @@ if [ $mem_size -gt 13 ]; then
         sudo mount -t tmpfs -o size=10G tmpfs base_camp
 fi
 sudo pacstrap ./base_camp base sudo arch-install-scripts archlinux-keyring
-sudo cp chewitt-ffmpeg.sh ./base_camp
+sudo cp chewitt-mpv.sh ffmpeg-*aarch64.pkg.tar* ./base_camp
 sudo cp -a etc keyrings ./base_camp
-sudo mkdir -p ./base_camp/MY-rockchip
-sudo systemd-nspawn -D ./base_camp --resolv-conf=replace-host --as-pid2 /chewitt-ffmpeg.sh
-cp  base_camp/MY-rockchip/* .
-cp base_camp/arch-ffmpeg.txt .
+sudo systemd-nspawn -D ./base_camp --resolv-conf=replace-host --as-pid2 /chewitt-mpv.sh
+cp  base_camp/mpv-[0-9]*-aarch64.pkg.tar.* .
 if [ $mem_size -gt 13 ]; then
         sudo umount base_camp
 	rm -rf base_camp

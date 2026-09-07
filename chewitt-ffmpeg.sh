@@ -56,9 +56,17 @@ echo "---------------------------------------------------"
 cp PKGBUILD PKGBUILD.org
 
 sed -i "s|x86_64|'aarch64'|" PKGBUILD
-sed -i 's|git+https://git.ffmpeg.org/ffmpeg.git?signed#tag=n${pkgver}|git+https://github.com/chewitt/FFmpeg.git|' PKGBUILD
+sed -i 's|git+https://git.ffmpeg.org/ffmpeg.git?signed#tag=n${pkgver}|ffmpeg::git+https://github.com/chewitt/FFmpeg/#branch=rockchip-9.0.1|' PKGBUILD
 sed -i 's|--enable-vulkan \\|--enable-vulkan \\\n   --enable-v4l2-m2m \\|' PKGBUILD
-sed -i "/^prepare()/a mv FFmpeg ffmpeg" PKGBUILD
+sed -i '/--enable-libbluray/d' PKGBUILD
+sed -i '/libbluray/d' PKGBUILD
+
+
+sed -i 's/$pkgname/$_pkgname/g' PKGBUILD
+sed -i 's/${pkgname}/${_pkgname}/g' PKGBUILD
+sed -i "s/pkgname=ffmpeg/pkgname=ffmpeg-chewitt\n_pkgname=ffmpeg/" PKGBUILD
+
+
 # KOKO
 # 【最適化1】RK3588のCPU(Cortex-A76+A55)に合わせた CFLAGS / CXXFLAGS の強制注入
 SED_FLAGS='  export CFLAGS="-O3 -mcpu=cortex-a76.cortex-a55+crypto+dotprod -pipe -fno-plt"\n  export CXXFLAGS="${CFLAGS}"\n'
