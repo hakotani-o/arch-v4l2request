@@ -60,6 +60,7 @@ jobs:
           # ここに圧縮済みファイルのパスを指定します
           files: |
             ./ffmpeg-*-aarch64.pkg.tar.*
+            ./mpv-*-aarch64.pkg.tar.*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
